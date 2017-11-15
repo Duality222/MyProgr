@@ -1,0 +1,9 @@
+# depslib dependency file v1.0
+1499673819 source:d:\myprograms\pr\gofish\main.cpp
+	<time.h>
+	<map>
+	<vector>
+	<algorithm>
+	<string>
+	<iostream>
+

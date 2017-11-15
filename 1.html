@@ -1,0 +1,244 @@
+
+< html > 
+< head > 
+< title >Матрица< /title > 
+
+< style type="text/css" > 
+
+.matrix 
+
+{ width:11px; font:11pt Lucida Console, Courier, monospace; 
+text-align:center; 
+padding:0px; background-color:#000 
+} 
+
+< /style > 
+
+< script type="text/javascript" > 
+
+// < ![CDATA[ 
+
+var height = 11; 
+var speed = 66; 
+var reveal = 33; 
+var repeat = 0; 
+repeat 
+var alink = "http://orocuen.narod.ru/";        //Ссылка на мой сайт; можете поставить свою ссылку. 
+
+
+/ ************************ \ 
+
+*Это - Матрица на JavaScript.* 
+*ниже этого текста желательно не редактировать* 
+
+\************************/ 
+
+
+var timer, table, x, y, columns, ma_txt, ma_cho; 
+reveal /= 100; 
+var m_coch = new Array(); 
+var m_copo = new Array(); 
+
+window.onload = function() 
+
+{ 
+
+if (document.getElementById) 
+
+{ 
+
+var matrix, tbody, tr, td; 
+matrix = document.getElementById("matrix"); 
+ma_txt = matrix.firstChild.nodeValue; 
+ma_txt = " "+ma_txt+" "; 
+columns=ma_txt.length; 
+while (matrix.childNodes.length) 
+matrix.removeChild(matrix.childNodes[0]); 
+table = document.createElement("table"); 
+table.cellSpacing = 0; 
+table.style.margin = "auto"; 
+table.style.width = "auto"; 
+tbody = document.createElement("tbody"); 
+for (x = 0; x < height; x++) 
+
+{ 
+
+tr = document.createElement("tr"); 
+for (y = 0; y < columns; y++) 
+
+{ 
+
+td = document.createElement("td"); 
+td.className = "matrix"; 
+
+td.appendChild(document.createTextNode(String.fromCharCode(160))); 
+tr.appendChild(td); 
+
+} 
+
+tbody.appendChild(tr); 
+
+} 
+
+table.appendChild(tbody); 
+matrix.appendChild(table); 
+ma_cho = ma_txt; 
+for (x = 0; x < columns; x++) 
+
+{ 
+
+m_copo[x]=0; 
+
+ma_cho+=String.fromCharCode(32+Math.floor(Math.random()*94)); 
+
+} 
+
+x = 0; 
+timer = setInterval("mytricks()", speed); 
+
+} 
+
+} 
+
+function mytricks() 
+
+{ 
+
+var mtmp, mrow; 
+var z = x; 
+x = 0; 
+for (y = 0; y < columns; y++) 
+
+{ 
+
+x = x + (m_copo[y] == 100); 
+mrow = m_copo[y]%100; 
+if (mrow && m_copo[y]<100) 
+
+{ 
+
+if (mrow 
+{ 
+
+mtmp=table.rows[mrow-1].cells[y]; 
+mtmp.firstChild.nodeValue = m_coch[y]; 
+mtmp.style.color = "#33ff66"; 
+mtmp.style.fontWeight = "bold"; 
+
+} 
+
+if (mrow > 1 && mrow < height + 2) 
+
+{ 
+
+mtmp = table.rows[mrow - 2].cells[y]; 
+mtmp.style.fontWeight="normal"; 
+mtmp.style.color="#00ff00"; 
+
+} 
+
+if (mrow > 2) table.rows[mrow - 3].cells[y].style.color = "#009900"; 
+
+if (mrow < Math.floor(height / 2) + 1) m_copo[y]++; 
+
+else if (mrow == Math.floor(height / 2) + 1 && m_coch[y] == ma_txt.charAt(y)) zoomer(y); 
+
+else if (mrow < height + 2) m_copo[y]++; 
+else if (m_copo[y] < 100) m_copo[y] = 0; 
+
+} 
+
+else if (Math.random()>0.9 && m_copo[y]<100) { 
+
+if (reveal>Math.random() && (z+1)/columns>Math.random()) 
+
+m_coch[y]=ma_cho.charAt(y); 
+else 
+m_coch[y]=ma_cho.charAt(Math.floor(Math.random()*ma_cho.length)); 
+m_copo[y]++; 
+
+} 
+
+} 
+
+if (x==columns) { 
+
+if (repeat) { 
+
+ma_cho=ma_txt; 
+for (x=0; x 
+m_copo[x]=0; 
+ma_cho+=String.fromCharCode(32+Math.floor(Math.random()*94)); 
+
+} 
+
+} 
+
+else clearInterval(timer); 
+
+} 
+
+} 
+
+function zoomer(ycol) { 
+
+var mtmp, mtem, ytmp; 
+if (m_copo[ycol]==Math.floor(height/2)+1) { 
+
+for (ytmp=0; ytmp 
+mtmp=table.rows[ytmp].cells[ycol]; 
+mtmp.firstChild.nodeValue=m_coch[ycol]; 
+mtmp.style.color="#33ff66"; 
+mtmp.style.fontWeight="bold"; 
+if (alink) { 
+
+mtmp.style.cursor="pointer"; 
+mtmp.onclick=function() {window.location.href=alink}; 
+
+} 
+
+} 
+
+mtmp=ma_cho.indexOf(ma_txt.charAt(ycol)); 
+m_copo[ycol]+=199; 
+setTimeout("zoomer("+ycol+")", speed); 
+
+} 
+
+else if (m_copo[ycol]>200) { 
+
+mtmp=table.rows[m_copo[ycol]-201].cells[ycol]; 
+mtem=table.rows[200+height-m_copo[ycol]].cells[ycol]; 
+m_copo[ycol]-=1; 
+mtmp.style.fontWeight="normal"; 
+mtem.style.fontWeight="normal"; 
+setTimeout("zoomer("+ycol+")", speed); 
+
+} 
+
+else if (m_copo[ycol]==200) m_copo[ycol]=100+Math.floor(height/2); 
+if (m_copo[ycol]>100 && m_copo[ycol]<200) { 
+
+mtmp=table.rows[m_copo[ycol]-101].cells[ycol]; 
+mtmp.firstChild.nodeValue=String.fromCharCode(160); 
+mtem=table.rows[100+height-m_copo[ycol]].cells[ycol]; 
+mtem.firstChild.nodeValue=String.fromCharCode(160); 
+m_copo[ycol]-=1; 
+setTimeout("zoomer("+ycol+")", speed); 
+
+} 
+
+} 
+
+// ]] > 
+
+< /script > 
+
+< /head > 
+
+< body bgcolor="black" > 
+
+< div id="matrix" >Матрица следит за тобой!< /div >        //Фраза, постепенно появляющаяся из кода. Можете написать свою фразу. 
+
+< /body > 
+< /html > 
